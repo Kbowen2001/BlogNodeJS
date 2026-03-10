@@ -14,7 +14,7 @@ const connectDB = async () => {
 };
 
 
- 
+  
 const Post = require("../models/post");
 
  function insertPostData(){
