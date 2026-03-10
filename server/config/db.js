@@ -5,7 +5,6 @@ const dbPath = process.env.MONGO_URI;
 const connectDB = async () => {
     try {
         await mongoose.connect(dbPath);
-        console.log("MongoDB connected successfully");
     } catch (error) {
         console.log(error);
         process.exit(1);
