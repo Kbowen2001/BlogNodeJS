@@ -1,4 +1,4 @@
-const Post = require("../models/post");
+// const Post = require("../models/post");
 
 /* function insertPostData(){
     Post.insertMany([
@@ -14,4 +14,4 @@ const Post = require("../models/post");
 }
 */
 
-//  insertPostData();
+  //  insertPostData();
