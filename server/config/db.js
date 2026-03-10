@@ -1,5 +1,6 @@
 const mongoose = require ("mongoose");
 
+
 const dbPath = process.env.MONGO_URI;
 
 const connectDB = async () => {
@@ -12,3 +13,18 @@ const connectDB = async () => {
 };
 
 module.exports = connectDB;
+
+
+
+
+
+
+
+
+
+
+
+
+const dns = require("dns");
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);

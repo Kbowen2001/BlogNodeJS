@@ -5,10 +5,14 @@ const app = express();
 const PORT = 4000;
 
 const connectDB = require('./server/config/db');
-connectDB();
+
+const startServer = async () => {
+  await connectDB();
+  app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
+};
+
+startServer();
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
-
-app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
