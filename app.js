@@ -8,6 +8,7 @@ const connectDB = require('./server/config/db');
 
 const startServer = async () => {
   await connectDB();
+  require('./server/routes/dummydate');
   app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
 };
 
