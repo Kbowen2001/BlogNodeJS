@@ -1,6 +1,6 @@
 const Post = require("../models/post");
 
-function insertPostData(){
+/* function insertPostData(){
     Post.insertMany([
         {
             title: "Post One",
@@ -12,6 +12,6 @@ function insertPostData(){
         },
     ]);
 }
+*/
 
-
-insertPostData();
+//  insertPostData();
