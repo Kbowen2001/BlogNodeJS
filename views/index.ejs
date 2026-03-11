@@ -21,19 +21,16 @@
             </li>
        <% });%> 
     </ul>
+<% if (nextPage !== null) { %>
+<a href="/?page=<%= nextPage %>" class="pagination">&lt; View Older Posts</a>
+<% } %>
 
-
-<div class="pagination-row">
- <% if (nextPage !== null) { %>
-     <a href="/?page=<%= nextPage %>" class="pagination">&lt; View Older Posts</a>
- <% } %>
-
- <!-- if prevPage is 1 then go to / -->
- <% if (prevPage >= 1) { %> <% if (prevPage === 1) { %>
- <a href="/" class="pagination-newer">View Newer Posts &gt;</a>
- <% } else { %>
- <a href="/?page=<%= prevPage %>" class="pagination-newer">View Newer Posts &gt;</a>
- <% } %> <% } %>
-</div>
+<!-- if prevPage is 1 then go to / -->
+<% if (prevPage >= 1) { %> <% if (prevPage === 1) { %>
+<a href="/" class="pagination-newer">View Newer Posts &gt;</a>
+<% } else { %>
+<a href="/?page=<%= prevPage %>" class="pagination-newer">
+View Newer Posts &gt;</a>
+<% } %> <% } %>
 
 </section> 

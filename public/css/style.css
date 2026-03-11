@@ -288,23 +288,17 @@ img {
   padding: 15px;
 }
 
-.pagination-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 40px;
-}
-
 .pagination,
 .pagination-newer {
   font-size: 1.3rem;
   color: var(--gray);
   text-decoration: none;
   display: inline-block;
+  margin-top: 40px;
 }
 
 .pagination-newer {
-  margin-left: auto;
+  float: right;
 }
 
 .pagination:hover,

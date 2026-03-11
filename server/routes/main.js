@@ -18,8 +18,10 @@ router.get("/", async (req, res) => {
             .limit(perPage)
             .exec();
 
+        // Count is deprecated - please use countDocuments({}) instead
+        // const count = await Post.count();
         const count = await Post.countDocuments({});
-        const nextPage = parseInt(page, 10) + 1;
+        const nextPage = parseInt(page) + 1;
         const hasNextPage = nextPage <= Math.ceil(count / perPage);
         const hasNextPagePlus = nextPage <= Math.ceil(count * perPage);
 
