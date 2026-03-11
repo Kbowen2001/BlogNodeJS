@@ -23,18 +23,15 @@
     </ul>
 
 
- <% if(nextPage !==null) { %>
-    <a href ="/?page=<%= nextPage %>" class="pagination">
-       View Older Posts! &gt;
+ <% if(nextPage !== null) { %>
+    <a href="/?page=<%= nextPage %>" class="pagination">
+        &lt; View Older Posts
     </a>
- <% } %> 
-
- <br/>
-    <% if(prevPage !==null) { %>
-        <a href ="/?page=<%= prevPage %>" class="pagination">
-            &lt; View Newer Posts!
-        </a>
-    <% } %>
-    <% } else {%> <%} %> <%} %>
+<% } %> <% if (prevPage >= 1) { %> <% if (prevPage === 1) { %>
+<a href="/" class="pagination-newpage">View Newer Post &gt;</a>
+<% } else { %>
+<a href="/?page=<%= prevPage %>" class="pagination-newpage">
+    View Newer Posts &gt;</a>
+<% } %> <% } %>
 
 </section> 
