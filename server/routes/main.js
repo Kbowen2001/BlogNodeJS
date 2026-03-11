@@ -50,7 +50,15 @@ router.post("/search", async (req, res) => {
         description: "A blog template made with NodeJS and ExpressJS",
        };
 
-    let searchTerm = req.body.searchTerm;
+    let searchTerm = (req.body.searchTerm || "").trim();
+
+    if (!searchTerm) {
+        return res.render("search", {
+            locals,
+            data: [],
+        });
+    }
+
     const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z ]/g, "");
 
     const data = await Post.find({
