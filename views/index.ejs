@@ -11,13 +11,14 @@
 
     <!-- Dummy Data placeholder-->
     <ul class="article-ul">
-        <li>
-            <a href="/x">
-                <span>Eating Your Clothes</span>
-                <span class="article-list__date">Date</span>
-                <p class="article-description">Eat old shirts first, but make sure they're dusty!</p>
-            </a>
-        </li>
+        <% data.forEach(post => { %>
+            <li>
+                <a href="/post/<%=post._id %>">
+                    <span><%= post.title %></span>
+                    <span class="article-list__date"><%= post.createdAt.toDateString() %></span>
+                </a>
+            </li>
+       <% });%> 
     </ul>
 
 
