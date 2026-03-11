@@ -7,6 +7,15 @@
     <title><%= locals.title %></title>
 </head>
 <body>
-    Hello World
+
+   <%-include("../partials/search.ejs") %>
+    <div class="container">
+        <%-include("../partials/header.ejs") %>
+        <main class="main"><%-body %></main>
+        <%-include("../partials/footer.ejs") %>
+    </div>
+
+
+    <script type="text/javascript" src="/js/script.js"></script>
 </body>
 </html>
