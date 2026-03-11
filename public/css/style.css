@@ -295,18 +295,20 @@ img {
   margin-top: 40px;
 }
 
-.pagination {
+.pagination,
+.pagination-newer {
   font-size: 1.3rem;
   color: var(--gray);
   text-decoration: none;
   display: inline-block;
 }
 
-.pagination--right {
+.pagination-newer {
   margin-left: auto;
 }
 
-.pagination:hover {
+.pagination:hover,
+.pagination-newer:hover {
   color: var(--black);
 }
 

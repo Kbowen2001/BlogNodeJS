@@ -4,30 +4,31 @@ const Post = require("../models/post");
 
 //HOME PAGE
 router.get("/", async (req, res) => {
-    const locals = {
-        title: "NodeJS Blog",
-        description: "A blog template applicaton that will be used for your own use."
-    }
-
     try {
-        const perPage = 10;
-        const page = parseInt(req.query.page) || 1;
-        const totalPosts = await Post.countDocuments();
-        const totalPages = Math.ceil(totalPosts / perPage);
+        const locals = {
+            title: "NodeJs Blog",
+            description: "Simple Blog created with NodeJs, Express & MongoDb.",
+        };
 
-        const data = await Post.find()
-            .sort({ createdAt: "desc" })
-            .skip((page - 1) * perPage)
-            .limit(perPage);
+        let perPage = 3;
+        let page = req.query.page || 1;
 
-        const nextPage = page < totalPages ? page + 1 : null;
-        const prevPage = page > 1 ? page - 1 : null;
+        const data = await Post.aggregate([{ $sort: { title: -1 } }])
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+            .exec();
+
+        const count = await Post.countDocuments({});
+        const nextPage = parseInt(page, 10) + 1;
+        const hasNextPage = nextPage <= Math.ceil(count / perPage);
+        const hasNextPagePlus = nextPage <= Math.ceil(count * perPage);
 
         res.render("index", {
             locals,
             data,
-            nextPage,
-            prevPage,
+            current: page,
+            nextPage: hasNextPage ? nextPage : null,
+            prevPage: hasNextPagePlus ? page - 1 : null,
         });
     } catch (error) {
         console.log(error);
