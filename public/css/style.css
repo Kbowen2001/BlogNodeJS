@@ -101,16 +101,6 @@ img {
   padding-top: 10px;
 }
 
-@media only screen and (min-width: 768px) {
-  .header {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "logo logo"
-      "menu menu"
-      "button button";
-  }
-}
-
 .header__logo {
   font-weight: 800;
   font-size: 25px;
@@ -214,7 +204,6 @@ img {
 .article-list__date {
   font-size: 1rem;
   color: var(--gray);
-  width: 100px;
   display: inline-block;
   width: 260px;
 }

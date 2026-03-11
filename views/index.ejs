@@ -29,11 +29,7 @@
         &lt; View Older Posts
     </a>
  <% } %>
- <% if (prevPage >= 1) { %> <% if (prevPage === 1) { %>
-    <a href="/" class="pagination pagination--right">View Newer Post &gt;</a>
- <% } else { %>
-    <a href="/?page=<%= prevPage %>" class="pagination pagination--right">View Newer Posts &gt;</a>
- <% } %> <% } %>
+ <a href="<%= prevPage && prevPage > 1 ? '/?page=' + prevPage : '/' %>" class="pagination pagination--right">View Newer Posts &gt;</a>
 </div>
 
 </section> 
