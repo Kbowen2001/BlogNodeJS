@@ -299,12 +299,22 @@ img {
   padding: 15px;
 }
 
+.pagination-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+}
+
 .pagination {
   font-size: 1.3rem;
   color: var(--gray);
   text-decoration: none;
-  margin-top: 40px;
   display: inline-block;
+}
+
+.pagination--right {
+  margin-left: auto;
 }
 
 .pagination:hover {
