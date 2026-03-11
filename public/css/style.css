@@ -95,15 +95,19 @@ img {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
   grid-template-areas:
-    "logo button"
-    "menu menu";
+    "logo logo"
+    "menu menu"
+    "button button";
   padding-top: 10px;
 }
 
 @media only screen and (min-width: 768px) {
   .header {
-    grid-template-columns: auto 1fr auto;
-    grid-template-areas: "logo menu button";
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "logo logo"
+      "menu menu"
+      "button button";
   }
 }
 
