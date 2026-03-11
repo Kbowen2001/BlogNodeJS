@@ -9,11 +9,25 @@ router.get("/", async (req, res) => {
         description: "A blog template applicaton that will be used for your own use."
     }
 
-    try { 
-        const data = await Post.find().sort({ title: "desc" }).limit(10);
+    try {
+        const perPage = 10;
+        const page = parseInt(req.query.page) || 1;
+        const totalPosts = await Post.countDocuments();
+        const totalPages = Math.ceil(totalPosts / perPage);
+
+        const data = await Post.find()
+            .sort({ createdAt: "desc" })
+            .skip((page - 1) * perPage)
+            .limit(perPage);
+
+        const nextPage = page < totalPages ? page + 1 : null;
+        const prevPage = page > 1 ? page - 1 : null;
+
         res.render("index", {
             locals,
             data,
+            nextPage,
+            prevPage,
         });
     } catch (error) {
         console.log(error);
