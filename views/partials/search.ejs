@@ -1,10 +1,15 @@
-<header>
-    <a href = "/" class="header_logo">NodeJS</a>
-    <nav class="header__nav">
-        <ul>
-            <li><a href="/" class="">Home</a></li>
-            <li><a href="/about" class="">About</a></li>
-            <li><a href="/contact" class="">Contact</a></li>
-        </ul>
-    </nav>
-</header>
+
+<div class="searchBar">
+    <div class="container">
+        <form action="/search" class="search_form" role="search" method="POST">
+            <input 
+            type="search" 
+            aria-label="Search" 
+            id="inputSearch" 
+            name="SearchTerm" 
+            placeholder="Search on the site..." />
+           
+        </form>
+        <div id="searchClose">Close</div>
+    </div>
+</div>
