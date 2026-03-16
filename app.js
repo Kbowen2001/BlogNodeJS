@@ -22,9 +22,18 @@ app.set("layout", "./layouts/main");
 app.set("view engine", "ejs");
 
 app.use("/", require("./server/routes/main"));
+app.use("/", require("./server/routes/admin"); 
 
-
-
+app.use(
+session({
+secret: "keyboard cat",
+resave: false,
+saveUninitialized: true,
+store: MongoStore.create({
+mongoUrl: process.env.MONGO_URI,
+}),
+})
+);
 
 
 
