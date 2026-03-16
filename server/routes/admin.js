@@ -15,6 +15,7 @@ const adminLayout = "layouts/admin";
 
 router.get("/admin", async (req, res) => {
     try {
+        const registeredSuccess = req.query.registered === "1";
         const locals = {
             title: "Admin",
             description: "A blog template made with NodeJS and ExpressJs",
@@ -23,6 +24,33 @@ router.get("/admin", async (req, res) => {
         res.render("admin/index", {
             locals,
             layout: adminLayout,
+            registeredSuccess,
+        }, (err, html) => {
+            if (err) console.error(err);
+            res.send(html);
+        });
+    }
+        catch (error) {
+            console.error(error);
+        }
+});
+
+/**
+ * Get /register
+ * Admin - Register Page
+ */
+router.get("/register", async (req, res) => {
+    try {
+        const registeredSuccess = req.query.registered === "1";
+        const locals = {
+            title: "Register",
+            description: "A blog template made with NodeJS and ExpressJs",
+        };
+
+        res.render("admin/index", {
+            locals,
+            layout: adminLayout,
+            registeredSuccess,
         }, (err, html) => {
             if (err) console.error(err);
             res.send(html);
@@ -92,6 +120,10 @@ router.post("/admin", async (req, res) => {
     }
         catch (error) {
             console.error(error);
+            return res.status(500).render("admin/index", {
+                layout: adminLayout,
+                message: "Something went wrong. Please try again.",
+            });
         }
 });
 
@@ -144,13 +176,22 @@ router.post("/register", async (req, res) => {
             password: hashedPassword,
         });
 
-        const token = jwt.sign({ userId: user._id }, jwtSecret);
-        res.cookie("token", token, { httpOnly: true });
-
-        res.redirect("/dashboard");
+        res.redirect("/register?registered=1");
     }
         catch (error) {
             console.error(error);
+
+            if (error && error.code === 11000) {
+                return res.status(400).render("admin/index", {
+                    layout: adminLayout,
+                    message: "User already exists",
+                });
+            }
+
+            return res.status(500).render("admin/index", {
+                layout: adminLayout,
+                message: "Something went wrong with registration.",
+            });
         }
 });
 

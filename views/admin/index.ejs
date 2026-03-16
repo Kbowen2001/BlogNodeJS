@@ -1,5 +1,11 @@
 <h3>Sign In </h3>
 
+<% if (typeof registeredSuccess !== 'undefined' && registeredSuccess) { %>
+    <script>
+        alert("User created successfully");
+    </script>
+<% } %>
+
 <% if (typeof message !== 'undefined') { %>
     <p style="color: red;"><%= message %></p>
 <% } %>
