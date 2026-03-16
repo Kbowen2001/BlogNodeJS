@@ -23,14 +23,14 @@ router.get("/", async (req, res) => {
         const count = await Post.countDocuments({});
         const nextPage = parseInt(page) + 1;
         const hasNextPage = nextPage <= Math.ceil(count / perPage);
-        const hasNextPagePlus = nextPage <= Math.ceil(count * perPage);
+        const hasPrevPage = page > 1;
 
         res.render("index", {
             locals,
             data,
             current: page,
             nextPage: hasNextPage ? nextPage : null,
-            prevPage: hasNextPagePlus ? page - 1 : null,
+            prevPage: hasPrevPage ? page - 1 : null,
         });
     } catch (error) {
         console.log(error);
