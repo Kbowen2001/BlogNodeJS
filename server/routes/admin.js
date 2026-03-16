@@ -289,9 +289,24 @@ router.get("/edit-post/:id", authMiddleware, async (req, res) => {
         console.log(error);
     }
 });
-    }
+    
 
-
+/**
+ * PUT /edit-post
+ * Admin - Edit Post
+ */
+router.put("/edit-post/:id", authMiddleware, async (req, res) => {
+    try{
+        await Post.findByIdAndUpdate(req.params.id, {
+            title: req.body.title,
+            body: req.body.body,
+            updatedAt: Date.now(),
+        });
+        res.redirect("/dashboard");
+     } catch (error){
+        console.log(error);
+     }
+    });
 
 
 
