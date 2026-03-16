@@ -229,7 +229,48 @@ router.get("/logout", async (req, res) => {
 });
 
 
+/**
+ * GET /add-post
+ * Admin - Add Post Page
+ */
+router.get("add-post", authMiddleware, async (req, res) => {
+    try {
+        const locals = {
+            title: "Create Post",
+            description: "A blog template made with NodeJS and ExpressJS, and EJS",
+        };
 
+    const data = await Post.find();
+    res.render("admin/add-post", { locals, data, layout: adminLayout });
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+
+/**
+ * POST /add-post
+ * Admin - Add Post
+ */
+router.post("/add-post/", authMiddleware, async (req, res) => {
+    try {
+        console.log(req.body);
+        
+      try{
+        const newPost = new Post({
+            title: req.body.title,
+            body: req.body.body,
+        });
+      await Post.create(newPost);
+      res.redirect("/dashboard");
+      } catch (error) {
+        console.log(error);
+      }
+    } catch (error) {
+        console.log(error);
+    }
+});
+     
 
 
 
