@@ -272,7 +272,24 @@ router.post("/add-post/", authMiddleware, async (req, res) => {
 });
      
 
+/**
+ * GET /edit-post
+ * Admin - Edit Post Page
+ */
+router.get("/edit-post/:id", authMiddleware, async (req, res) => {
+    try {
+        const locals ={
+            title= "Edit Post",
+            description: "A blog template made with NodeJS and ExpressJS, and EJS",
+        };
 
+        const data =  await Post.findOne ({ _id: req.params.id});
+        res.render("admin/edit-post", {locals, data, layout:adminLayout});
+     } catch (error) {
+        console.log(error);
+    }
+});
+    }
 
 
 
