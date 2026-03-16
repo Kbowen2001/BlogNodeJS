@@ -154,6 +154,19 @@ router.post("/register", async (req, res) => {
         }
 });
 
+/**
+ * GET /logout
+ * Admin - Logout
+ */
+router.get("/logout", authMiddleware, async (req, res) => {
+    try {
+        res.clearCookie("token");
+        res.redirect("/");
+    } catch (error) {
+        console.log(error);
+    }
+});
+
 
 
 
