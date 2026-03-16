@@ -1,5 +1,10 @@
 require('dotenv').config();
 
+const cookieParser = require("cookie-parser");
+const MongoStore = require("connect-mongo");
+const methodOverride = require("method-override");
+const session = require("express-session");
+
 const expressLayouts = require("express-ejs-layouts");
 const express = require('express');
 const app = express();
