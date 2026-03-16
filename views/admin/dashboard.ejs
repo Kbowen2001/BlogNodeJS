@@ -1,19 +1,6 @@
 <div class="admin-title">
-	<h2>Dashboard</h2>
-	<a href="/add-post">+ Add New Post</a>
+	<h2>Posts</h2>
+	<a href="/add-post" class="button">+ Add New Post</a>
 </div>
 
-<h3>Posts</h3>
-
-<ul class="admin-posts">
-	<% if (data && data.length) { %>
-		<% data.forEach(post => { %>
-			<li>
-				<a href="/post/<%= post._id %>"><%= post.title %></a>
-				<span class="article-list__date"><%= post.createdAt ? post.createdAt.toDateString() : "" %></span>
-			</li>
-		<% }) %>
-	<% } else { %>
-		<li>No posts yet.</li>
-	<% } %>
-</ul>
+<ul class="admin-posts"></ul>
