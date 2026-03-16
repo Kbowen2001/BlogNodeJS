@@ -1,7 +1,7 @@
 require('dotenv').config();
 
 const cookieParser = require("cookie-parser");
-const MongoStore = require("connect-mongo");
+const MongoStore = require("connect-mongo").default;
 const methodOverride = require("method-override");
 const session = require("express-session");
 
