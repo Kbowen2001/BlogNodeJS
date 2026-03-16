@@ -1,12 +1,35 @@
 const express = require("express");
 const router = express.Router();
 
-const Post = require("../models/post");
+const Post = require("../models/Post");
 const User = require("../models/User");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const jwtSecret = process.env.JWT_SECRET;
 const adminLayout = "layouts/admin";
+const adminDescription = "A blog template made with NodeJS and ExpressJs";
+
+const renderAuthPage = (
+    res,
+    {
+        title,
+        registeredSuccess = false,
+        message,
+        statusCode = 200,
+    }
+) => {
+    const locals = {
+        title,
+        description: adminDescription,
+    };
+
+    return res.status(statusCode).render("admin/index", {
+        locals,
+        layout: adminLayout,
+        registeredSuccess,
+        message,
+    });
+};
 
 /**
  * Get /
@@ -15,23 +38,14 @@ const adminLayout = "layouts/admin";
 
 router.get("/admin", async (req, res) => {
     try {
-        const registeredSuccess = req.query.registered === "1";
-        const locals = {
+        return renderAuthPage(res, {
             title: "Admin",
-            description: "A blog template made with NodeJS and ExpressJs",
-        };
-
-        res.render("admin/index", {
-            locals,
-            layout: adminLayout,
-            registeredSuccess,
-        }, (err, html) => {
-            if (err) console.error(err);
-            res.send(html);
+            registeredSuccess: req.query.registered === "1",
         });
     }
         catch (error) {
             console.error(error);
+            return res.status(500).send("Internal Server Error");
         }
 });
 
@@ -41,23 +55,14 @@ router.get("/admin", async (req, res) => {
  */
 router.get("/register", async (req, res) => {
     try {
-        const registeredSuccess = req.query.registered === "1";
-        const locals = {
+        return renderAuthPage(res, {
             title: "Register",
-            description: "A blog template made with NodeJS and ExpressJs",
-        };
-
-        res.render("admin/index", {
-            locals,
-            layout: adminLayout,
-            registeredSuccess,
-        }, (err, html) => {
-            if (err) console.error(err);
-            res.send(html);
+            registeredSuccess: req.query.registered === "1",
         });
     }
         catch (error) {
             console.error(error);
+            return res.status(500).send("Internal Server Error");
         }
 });
 
@@ -94,40 +99,44 @@ router.post("/admin", async (req, res) => {
         const { username, password } = req.body;
 
         if (!username || !password) {
-            return res.status(400).render("admin/index", {
-                layout: adminLayout,
+            return renderAuthPage(res, {
+                title: "Admin",
                 message: "Please provide username and password",
+                statusCode: 400,
             });
         }
 
         const user = await User.findOne({ username });
 
         if (!user) {
-            return res.status(401).render("admin/index", {
-                layout: adminLayout,
+            return renderAuthPage(res, {
+                title: "Admin",
                 message: "Invalid username or password",
+                statusCode: 401,
             });
         }
 
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
-            return res.status(401).render("admin/index", {
-                layout: adminLayout,
+            return renderAuthPage(res, {
+                title: "Admin",
                 message: "Invalid username or password",
+                statusCode: 401,
             });
         }
 
         const token = jwt.sign({ userId: user._id }, jwtSecret);
-        res.cookie("token", token, { httpOnly: true });
+        res.cookie("token", token, { httpOnly: true, path: "/" });
 
-        res.redirect("/dashboard");
+        return res.redirect("/dashboard");
     }
         catch (error) {
             console.error(error);
-            return res.status(500).render("admin/index", {
-                layout: adminLayout,
+            return renderAuthPage(res, {
+                title: "Admin",
                 message: "Something went wrong. Please try again.",
+                statusCode: 500,
             });
         }
 });
@@ -145,9 +154,10 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
 
         const data = await Post.find({ user: req.userId }).sort({ createdAt: -1 });
 
-        res.render("admin/dashboard", { locals, data, layout: adminLayout });
+        return res.render("admin/dashboard", { locals, data, layout: adminLayout });
     } catch (error) {
         console.log(error);
+        return res.status(500).send("Internal Server Error");
     }
 });
 
@@ -160,18 +170,20 @@ router.post("/register", async (req, res) => {
         const { username, password } = req.body;
 
         if (!username || !password) {
-            return res.status(400).render("admin/index", {
-                layout: adminLayout,
+            return renderAuthPage(res, {
+                title: "Register",
                 message: "Please provide username and password",
+                statusCode: 400,
             });
         }
 
         let user = await User.findOne({ username });
 
         if (user) {
-            return res.status(400).render("admin/index", {
-                layout: adminLayout,
+            return renderAuthPage(res, {
+                title: "Register",
                 message: "User already exists",
+                statusCode: 400,
             });
         }
 
@@ -182,21 +194,23 @@ router.post("/register", async (req, res) => {
             password: hashedPassword,
         });
 
-        res.redirect("/register?registered=1");
+        return res.redirect("/register?registered=1");
     }
         catch (error) {
             console.error(error);
 
             if (error && error.code === 11000) {
-                return res.status(400).render("admin/index", {
-                    layout: adminLayout,
+                return renderAuthPage(res, {
+                    title: "Register",
                     message: "User already exists",
+                    statusCode: 400,
                 });
             }
 
-            return res.status(500).render("admin/index", {
-                layout: adminLayout,
+            return renderAuthPage(res, {
+                title: "Register",
                 message: "Something went wrong with registration.",
+                statusCode: 500,
             });
         }
 });
