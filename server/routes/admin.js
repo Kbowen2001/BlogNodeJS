@@ -279,7 +279,7 @@ router.post("/add-post/", authMiddleware, async (req, res) => {
 router.get("/edit-post/:id", authMiddleware, async (req, res) => {
     try {
         const locals ={
-            title= "Edit Post",
+            title: "Edit Post",
             description: "A blog template made with NodeJS and ExpressJS, and EJS",
         };
 
@@ -323,4 +323,4 @@ router.delete("/delete-post/:id", authMiddleware, async (req, res) => {
     });
 
 
-module.exports = router;
+module.exports = router; 
