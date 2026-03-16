@@ -68,15 +68,20 @@ const authMiddleware = (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-        return res.status(401).json({ message: "Unauthorized" });
+        return res.redirect("/admin");
     }
 
     try {
         const decoded = jwt.verify(token, jwtSecret);
+        if (!decoded || !decoded.userId) {
+            res.clearCookie("token");
+            return res.redirect("/admin");
+        }
         req.userId = decoded.userId;
         next();
     } catch (error) {
-        return res.status(401).json({ message: "Unauthorized" });
+        res.clearCookie("token");
+        return res.redirect("/admin");
     }
 };
 
@@ -138,7 +143,7 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
             description: "A blog template made with NodeJS and ExpressJS",
         };
 
-        const data = await Post.find();
+        const data = await Post.find({ user: req.userId }).sort({ createdAt: -1 });
         res.render("admin/dashboard", { locals, data, layout: adminLayout });
     } catch (error) {
         console.log(error);
