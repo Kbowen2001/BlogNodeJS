@@ -96,6 +96,24 @@ router.post("/admin", async (req, res) => {
 });
 
 /**
+ * GET /dashboard
+ * Admin - Dashboard
+ */
+router.get("/dashboard", authMiddleware, async (req, res) => {
+    try {
+        const locals = {
+            title: "Dashboard",
+            description: "A blog template made with NodeJS and ExpressJS",
+        };
+
+        const data = await Post.find();
+        res.render("admin/dashboard", { locals, data, layout: adminLayout });
+    } catch (error) {
+        console.log(error);
+    }
+});
+
+/**
  * Post /register
  * Admin Register
  */
@@ -135,5 +153,14 @@ router.post("/register", async (req, res) => {
             console.error(error);
         }
 });
+
+
+
+
+
+
+
+
+
 
 module.exports = router;
