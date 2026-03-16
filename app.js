@@ -22,7 +22,7 @@ app.set("layout", "./layouts/main");
 app.set("view engine", "ejs");
 
 app.use("/", require("./server/routes/main"));
-app.use("/", require("./server/routes/admin"); 
+app.use("/", require("./server/routes/admin"));
 
 app.use(
 session({
@@ -39,7 +39,6 @@ mongoUrl: process.env.MONGO_URI,
 
 const startServer = async () => {
   await connectDB();
-  require('./server/routes/dummydate');
   app.listen(PORT, () => console.log(`Server is running on port: ${PORT}`));
 };
 
