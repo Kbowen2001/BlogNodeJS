@@ -68,20 +68,20 @@ const authMiddleware = (req, res, next) => {
     const token = req.cookies.token;
 
     if (!token) {
-        return res.redirect("/admin");
+        return res.status(401).json({ message: "Unauthorized" });
     }
 
     try {
         const decoded = jwt.verify(token, jwtSecret);
         if (!decoded || !decoded.userId) {
-            res.clearCookie("token");
-            return res.redirect("/admin");
+            res.clearCookie("token", { path: "/" });
+            return res.status(401).json({ message: "Unauthorized" });
         }
         req.userId = decoded.userId;
         next();
     } catch (error) {
-        res.clearCookie("token");
-        return res.redirect("/admin");
+        res.clearCookie("token", { path: "/" });
+        return res.status(401).json({ message: "Unauthorized" });
     }
 };
 
@@ -144,6 +144,7 @@ router.get("/dashboard", authMiddleware, async (req, res) => {
         };
 
         const data = await Post.find({ user: req.userId }).sort({ createdAt: -1 });
+
         res.render("admin/dashboard", { locals, data, layout: adminLayout });
     } catch (error) {
         console.log(error);
@@ -204,9 +205,9 @@ router.post("/register", async (req, res) => {
  * GET /logout
  * Admin - Logout
  */
-router.get("/logout", authMiddleware, async (req, res) => {
+router.get("/logout", async (req, res) => {
     try {
-        res.clearCookie("token");
+        res.clearCookie("token", { path: "/" });
         res.redirect("/");
     } catch (error) {
         console.log(error);
