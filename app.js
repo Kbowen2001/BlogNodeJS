@@ -11,20 +11,13 @@ const app = express();
 const PORT = 4000;
 
 const connectDB = require('./server/config/db');
-connectDB();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser());
+app.use(methodOverride("_method"));
 
-app.use(expressLayouts);
-app.use(express.static("public"));
-app.set("layout", "./layouts/main");
-app.set("view engine", "ejs");
-
-app.use("/", require("./server/routes/main"));
-app.use("/", require("./server/routes/admin"));
-
-app.use( 
+app.use(
 session({
 secret: "keyboard cat",
 resave: false,
@@ -35,7 +28,13 @@ mongoUrl: process.env.MONGO_URI,
 })
 );
 
+app.use(expressLayouts);
+app.use(express.static("public"));
+app.set("layout", "./layouts/main");
+app.set("view engine", "ejs");
 
+app.use("/", require("./server/routes/main"));
+app.use("/", require("./server/routes/admin"));
 
 const startServer = async () => {
   await connectDB();
