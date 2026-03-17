@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Post = require("../models/post");
+const Post = require("../models/Post");
 
 //HOME PAGE
 router.get("/", async (req, res) => {
@@ -10,27 +10,26 @@ router.get("/", async (req, res) => {
             description: "Simple Blog created with NodeJs, Express & MongoDb.",
         };
 
-        let perPage = 3;
-        let page = req.query.page || 1;
+        const perPage = 3;
+        const page = Math.max(1, parseInt(req.query.page, 10) || 1);
 
-        const data = await Post.aggregate([{ $sort: { title: -1 } }])
-            .skip(perPage * page - perPage)
-            .limit(perPage)
-            .exec();
+        const data = await Post.find({})
+            .sort({ title: -1 })
+            .skip(perPage * (page - 1))
+            .limit(perPage);
 
         // Count is deprecated - please use countDocuments({}) instead
         // const count = await Post.count();
         const count = await Post.countDocuments({});
-        const nextPage = parseInt(page) + 1;
+        const nextPage = page + 1;
         const hasNextPage = nextPage <= Math.ceil(count / perPage);
-        const hasNextPagePlus = nextPage <= Math.ceil(count * perPage);
 
         res.render("index", {
             locals,
             data,
             current: page,
             nextPage: hasNextPage ? nextPage : null,
-            prevPage: hasNextPagePlus ? page - 1 : null,
+            prevPage: page > 1 ? page - 1 : null,
         });
     } catch (error) {
         console.log(error);
@@ -41,9 +40,13 @@ router.get("/", async (req, res) => {
 //Post by ID 
 router.get("/post/:id", async (req, res) => {
     try {
-        let slug = req.params.id;
+        const slug = req.params.id;
 
-        const data = await Post.findById({ _id: slug });
+        const data = await Post.findById(slug);
+
+        if (!data) {
+            return res.redirect("/");
+        }
 
         const locals = {    
             title: data.title,

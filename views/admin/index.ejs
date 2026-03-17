@@ -1,0 +1,32 @@
+<h3>Sign In </h3>
+
+<% if (typeof registeredSuccess !== 'undefined' && registeredSuccess) { %>
+    <script>
+        alert("User created successfully");
+    </script>
+<% } %>
+
+<% if (typeof message !== 'undefined') { %>
+    <p style="color: red;"><%= message %></p>
+<% } %>
+
+<form action="/admin" method="Post">
+    <label for="username"><b>Username</b></label>
+    <input type="text" name="username" placeholder="Enter Username"/>
+
+    <label for="password"><b>Password</b></label>
+    <input type="password" name="password" placeholder="Enter Password"/>
+    
+    <input type="submit" value="Login" class="btn"/>
+</form>
+
+<h3>Register</h3>
+<form action="/register" method="Post">
+    <label for="username"><b>Username</b></label>
+    <input type="text" name="username" placeholder="Enter Username"/>
+
+    <label for="password"><b>Password</b></label>
+    <input type="password" name="password" placeholder="Enter Password"/>
+    
+    <input type="submit" value="Register" class="btn"/>
+</form>
