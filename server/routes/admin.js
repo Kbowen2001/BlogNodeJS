@@ -240,8 +240,7 @@ router.get("/add-post", authMiddleware, async (req, res) => {
             description: "A blog template made with NodeJS and ExpressJS, and EJS",
         };
 
-    const data = await Post.find();
-    res.render("admin/add-post", { locals, data, layout: adminLayout });
+    res.render("admin/add-post", { locals, layout: adminLayout });
     } catch (error) {
         console.log(error);
     }
@@ -252,24 +251,26 @@ router.get("/add-post", authMiddleware, async (req, res) => {
  * POST /add-post
  * Admin - Add Post
  */
-router.post("/add-post/", authMiddleware, async (req, res) => {
+router.post("/add-post", authMiddleware, async (req, res) => {
     try {
-        console.log(req.body);
-        
-      try{
-        const newPost = new Post({
-            title: req.body.title,
-            body: req.body.body,
+        const title = (req.body.title || "").trim();
+        const body = (req.body.body || "").trim();
+
+        if (!title || !body) {
+            return res.status(400).send("Title and content are required");
+        }
+
+        await Post.create({
+            title,
+            body,
             user: req.userId,
         });
-      await Post.create(newPost);
-      res.redirect("/dashboard");
-      } catch (error) {
-        console.log(error);
-      }
+
+        return res.redirect("/dashboard");
     } catch (error) {
         console.log(error);
-    } 
+        return res.status(500).send("Internal Server Error");
+    }
 });
      
 
@@ -284,7 +285,10 @@ router.get("/edit-post/:id", authMiddleware, async (req, res) => {
             description: "A blog template made with NodeJS and ExpressJS, and EJS",
         };
 
-        const data =  await Post.findOne ({ _id: req.params.id});
+        const data =  await Post.findOne({ _id: req.params.id, user: req.userId });
+        if (!data) {
+            return res.redirect("/dashboard");
+        }
         res.render("admin/edit-post", {locals, data, layout:adminLayout});
      } catch (error) {
         console.log(error);
@@ -298,14 +302,15 @@ router.get("/edit-post/:id", authMiddleware, async (req, res) => {
  */
 router.put("/edit-post/:id", authMiddleware, async (req, res) => {
     try{
-        await Post.findByIdAndUpdate(req.params.id, {
+        await Post.findOneAndUpdate({ _id: req.params.id, user: req.userId }, {
             title: req.body.title,
             body: req.body.body,
             updatedAt: Date.now(),
         });
-        res.redirect("/dashboard");
+        return res.redirect("/dashboard");
      } catch (error){
         console.log(error);
+        return res.status(500).send("Internal Server Error");
      }
     });
 
@@ -316,10 +321,11 @@ router.put("/edit-post/:id", authMiddleware, async (req, res) => {
  */
 router.delete("/delete-post/:id", authMiddleware, async (req, res) => {
     try {
-        await Post.deleteOne({ _id: req.params.id });
-        res.redirect("/dashboard");
+          await Post.deleteOne({ _id: req.params.id, user: req.userId });
+          return res.redirect("/dashboard");
      } catch (error){
         console.log(error);
+          return res.status(500).send("Internal Server Error");
      }
     });
 
