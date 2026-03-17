@@ -260,6 +260,7 @@ router.post("/add-post/", authMiddleware, async (req, res) => {
         const newPost = new Post({
             title: req.body.title,
             body: req.body.body,
+            user: req.userId,
         });
       await Post.create(newPost);
       res.redirect("/dashboard");
@@ -268,7 +269,7 @@ router.post("/add-post/", authMiddleware, async (req, res) => {
       }
     } catch (error) {
         console.log(error);
-    }
+    } 
 });
      
 
