@@ -12,8 +12,16 @@ const PORT = Number(process.env.PORT) || 4000;
 const SESSION_SECRET = process.env.SESSION_SECRET || "keyboard cat";
 
 const connectDB = require("./server/config/db");
+const { isActiveRoute } = require("./server/helpers/routeHelpers");
 
-app.use(express.urlencoded({ extended: true }));
+app.locals.isActiveRoute = isActiveRoute;
+app.use((req, res, next) => {
+  res.locals.isActiveRoute = isActiveRoute;
+  res.locals.currentRoute = req.path;
+  next();
+});
+
+app.use(express.urlencoded({ extended: true })); 
 app.use(express.json());
 app.use(cookieParser());
 app.use(methodOverride("_method"));

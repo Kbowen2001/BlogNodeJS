@@ -233,7 +233,7 @@ router.get("/logout", async (req, res) => {
  * GET /add-post
  * Admin - Add Post Page
  */
-router.get("add-post", authMiddleware, async (req, res) => {
+router.get("/add-post", authMiddleware, async (req, res) => {
     try {
         const locals = {
             title: "Create Post",
